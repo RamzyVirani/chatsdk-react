@@ -185,6 +185,10 @@ body {
     background-color: #f2f2f2;
 }
 
+.row.sideBar-body.active {
+    background-color: #f2f2f2;
+}
+
 .sideBar-avatar {
     text-align: center;
     padding: 0 !important;
@@ -216,6 +220,7 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
     color: #000;
+    font-weight: bold;
 }
 
 .sideBar-time {

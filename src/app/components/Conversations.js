@@ -17,7 +17,7 @@ class Conversations extends Component {
     }
 
     sendMessageOnEnter(e) {
-        if (e.keyCode == 13 && e.shiftKey == false) {
+        if (e.keyCode === 13 && e.shiftKey === false) {
             e.preventDefault();
             this.sendMessage();
             return;
@@ -56,7 +56,7 @@ class Conversations extends Component {
     render() {
         let thread = this.props.thread || null;
         if (!(thread && thread.details && thread.details.image)) {
-            return ("Click on a thread to view conversation");
+            return ("Loading Conversation....");
         }
         return (
             <div className="col-sm-8 conversation">
@@ -118,25 +118,32 @@ class Conversations extends Component {
             text = "sender";
         }
 
-        return (<div className="row message-body" key={id}>
-            <div className={["col-sm-12 " + container]}>
-                <div className={text}>
-                    <div className="message-text">
-                        {message.json_v2 && message.json_v2.text}
-                    </div>
-                    <span className="message-time pull-right">
+        return (
+            <div className="row message-body" key={id}>
+                <div className={["col-sm-12 " + container]}>
+                    <div className={text}>
+                        <div className="message-text">
+                            {message.json_v2 && message.json_v2.text}
+                        </div>
+                        <span className="message-time pull-right">
                         <Moment fromNow withTitle format="HH:mm"
                                 titleFormat="YYYY-MM-DD HH:mm">{message.date}</Moment>
                     </span>
+                    </div>
                 </div>
-            </div>
-        </div>);
+            </div>);
     }
 }
 
 export default connect(
     (state, ownerProps) => {
         let thread = state.thread.threads[state.thread.open];
+        /*if (thread == null) {
+            let firstThread = Object.keys(state.thread.threads)[0] !== undefined ? Object.keys(state.thread.threads)[0] : null;
+            if (firstThread !== null) {
+                thread = state.thread.threads[firstThread];
+            }
+        }*/
         if (thread && thread.details && thread.users) {
             // If group then thread.details.name would not be empty;
             if (thread.details.name == "") {

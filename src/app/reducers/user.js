@@ -30,6 +30,7 @@ export default function user(state = {}, action) {
             newState["users"][action.payload.id] = action.payload;
             return newState;
         }
+
         default:
             return state;
     }

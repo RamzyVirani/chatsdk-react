@@ -1,5 +1,6 @@
+import {requestSuccessAction, requestFailureAction, curl_get, curl_post} from "./http";
 import {once} from "../firebase";
-import {firebaseNodes} from "../constants";
+import {firebaseNodes, BASE_URL, ENDPOINTS} from "../constants";
 import {createRecord} from "./firebase";
 
 const types = {
@@ -12,6 +13,10 @@ const types = {
     CREATE_MY_PROFILE: "CREATE_MY_PROFILE",
     CREATE_MY_PROFILE_REQUEST: "CREATE_MY_PROFILE_REQUEST",
     CREATE_MY_PROFILE_FAILED: "CREATE_MY_PROFILE_FAILED",
+
+    GET_AUTH: "GET_AUTH",
+    GET_AUTH_REQUEST: "GET_AUTH_REQUEST",
+    GET_AUTH_FAILED: "GET_AUTH_FAILED",
 };
 
 export default types;
@@ -31,6 +36,16 @@ export function getMyProfile(id, userFromWeb = null) {
                 dispatch({type: types.GET_MY_PROFILE_FAILED, payload: {user: fromWeb, id}});
             }
         });
+    }
+
+}
+
+export function getAuth() {
+    return (dispatch) => {
+        dispatch({type: types.GET_AUTH_REQUEST});
+        curl_get(dispatch, BASE_URL + ENDPOINTS.GET_AUTH, {}, types.GET_AUTH_FAILED, (data) => {
+            dispatch(requestSuccessAction({data}, types.GET_AUTH))
+        })
     }
 }
 

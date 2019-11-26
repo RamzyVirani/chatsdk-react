@@ -28,6 +28,9 @@ class Contacts extends Component {
     }
 
     render() {
+        if (this.props.open_thread !== null && !this.props.open) {
+            this.props.openThread(this.props.open_thread);
+        }
         let user = this.props.user || null;
         let threads = this.props.threads || null;
         let name = null, image = null;
@@ -274,9 +277,16 @@ class Contacts extends Component {
 
 export default connect(
     state => {
+        let threads = state.thread.threads || null;
+        let firstThread = null;
+        if (threads !== null) {
+            firstThread = Object.keys(threads)[0] !== undefined ? Object.keys(threads)[0] : null;
+        }
         return {
             user: state.user,
-            threads: state.thread.threads
+            threads: state.thread.threads,
+            open_thread: firstThread,
+            open: state.thread.open == null ? false : true
         };
     },
     {attachEventListenersToThreads, openThread}
