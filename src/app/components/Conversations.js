@@ -16,6 +16,22 @@ class Conversations extends Component {
         };
     }
 
+    scrollToBottom() {
+        // console.log()
+        if (this.el !== undefined) {
+            this.el.scrollIntoView({behavior: 'smooth'});
+        }
+    }
+
+    componentDidMount() {
+        this.scrollToBottom();
+    }
+
+    componentDidUpdate() {
+        this.scrollToBottom();
+    }
+
+
     sendMessageOnEnter(e) {
         if (e.keyCode === 13 && e.shiftKey === false) {
             e.preventDefault();
@@ -76,18 +92,23 @@ class Conversations extends Component {
                 </div>
                 <div className="row message" id="conversation">
                     {/*TODO: We need to maintain a total_messages prop in threads object to maintain show or hide "Show Previous Message" button*/}
-                    {/*<div className="row message-previous">*/}
-                    {/*<div className="col-sm-12 previous">*/}
-                    {/*<a id="ankitjain28" name="20">*/}
-                    {/*Show Previous Message!*/}
-                    {/*</a>*/}
-                    {/*</div>*/}
-                    {/*</div>*/}
+                    {Object.entries(thread.messages).length > 19 ?
+                        <div className="row message-previous">
+                            <div className="col-sm-12 previous">
+                                <a id="ankitjain28" name="20">
+                                    Show Previous Message!
+                                </a>
+                            </div>
+                        </div> : null
+                    }
+
                     {thread.messages && Object.keys(thread.messages).map((message, id) => {
                         return this.renderSingleMessage(thread.messages[message], message);
                     })}
 
-
+                    <span id="messages-bottom" ref={el => {
+                        this.el = el;
+                    }}/>
                 </div>
                 <div className="row reply">
                     {/*<div className="col-sm-1 col-xs-1 reply-emojis">
@@ -138,12 +159,6 @@ class Conversations extends Component {
 export default connect(
     (state, ownerProps) => {
         let thread = state.thread.threads[state.thread.open];
-        /*if (thread == null) {
-            let firstThread = Object.keys(state.thread.threads)[0] !== undefined ? Object.keys(state.thread.threads)[0] : null;
-            if (firstThread !== null) {
-                thread = state.thread.threads[firstThread];
-            }
-        }*/
         if (thread && thread.details && thread.users) {
             // If group then thread.details.name would not be empty;
             if (thread.details.name == "") {

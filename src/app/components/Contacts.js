@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {attachEventListenersToThreads, openThread} from "../actions/thread"
 import ContactSingle from "./ContactSingle";
+import {isEmptyStatement} from "@babel/types";
 
 
 class Contacts extends Component {
@@ -51,7 +52,10 @@ class Contacts extends Component {
                     </div>
                     <div className="row sideBar">
                         {threads && Object.keys(threads).map(threadId => {
-                            return (<ContactSingle key={threadId} id={threadId} onClick={this.onClickContactSingle}/>);
+                            if (threads[threadId].hasOwnProperty('messages') && Object.entries(threads[threadId].messages).length > 0) {
+                                return (
+                                    <ContactSingle key={threadId} id={threadId} onClick={this.onClickContactSingle}/>);
+                            }
                         })}
                     </div>
                 </div>
@@ -280,7 +284,20 @@ export default connect(
         let threads = state.thread.threads || null;
         let firstThread = null;
         if (threads !== null) {
-            firstThread = Object.keys(threads)[0] !== undefined ? Object.keys(threads)[0] : null;
+            {
+                Object.keys(threads).map((thread, key) => {
+                    if (Object.keys(threads)[key] !== undefined && threads[Object.keys(threads)[key]].hasOwnProperty('messages') && Object.entries(threads[Object.keys(threads)[key]].messages).length > 0) {
+
+                        firstThread = Object.keys(threads)[key];
+                        return false;
+                    }
+                })
+            }
+
+            /*if (Object.keys(threads)[0] !== undefined && threads[Object.keys(threads)[0]].hasOwnProperty('messages')) {
+
+                firstThread = Object.keys(threads)[0];
+            }*/
         }
         return {
             user: state.user,
