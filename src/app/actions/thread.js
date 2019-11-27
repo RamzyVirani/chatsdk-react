@@ -24,7 +24,7 @@ const types = {
 
 export default types;
 
-export function attachEventListenersToThreads(threads, myUserId) {
+export function attachEventListenersToThreads(threads, myUserId, previous = null) {
     return (dispatch) => {
         for (let threadKey in threads) {
             once(firebaseNodes.THREADS + threadKey + firebaseNodes.THREAD_USERS, (users, thread_id) => {
@@ -46,9 +46,20 @@ export function attachEventListenersToThreads(threads, myUserId) {
 
             addEventListener(firebaseNodes.THREADS + threadKey + firebaseNodes.THREAD_MESSAGES, (message, thread_id) => {
                 dispatch({type: types.GET_MESSAGE, payload: {messages: message, thread_id},})
-            }, threadKey, PAGINATION.MESSAGES)
+            }, threadKey, PAGINATION.MESSAGES, previous)
         }
     }
+}
+
+export function getPreviousMessages(threadKey, myUserId, previous = null) {
+    
+    return (dispatch) => {
+        addEventListener(firebaseNodes.THREADS + threadKey + firebaseNodes.THREAD_MESSAGES, (message, thread_id) => {
+            console.log(message, thread_id)
+            // dispatch({type: types.GET_MESSAGE, payload: {messages: message, thread_id},})
+        }, threadKey, PAGINATION.MESSAGES, previous)
+    }
+
 }
 
 export function attachEventListenerToUserProfile(id, dispatch) {

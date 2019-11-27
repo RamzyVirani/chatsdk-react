@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import Moment from "react-moment";
 import cloneDeep from "lodash/cloneDeep"
-import {sendMessage} from "../actions/thread"
+import {attachEventListenersToThreads, sendMessage, getPreviousMessages} from "../actions/thread"
 
 class Conversations extends Component {
 
@@ -14,6 +14,7 @@ class Conversations extends Component {
         this.state = {
             text: ""
         };
+        this.getPreviousMessages = this.getPreviousMessages.bind(this);
     }
 
     scrollToBottom() {
@@ -31,6 +32,10 @@ class Conversations extends Component {
         this.scrollToBottom();
     }
 
+    getPreviousMessages(e) {
+        e.preventDefault();
+        this.props.getPreviousMessages(this.props.open, this.props.user.id, Object.keys(this.props.thread.messages).length)
+    }
 
     sendMessageOnEnter(e) {
         if (e.keyCode === 13 && e.shiftKey === false) {
@@ -71,9 +76,15 @@ class Conversations extends Component {
 
     render() {
         let thread = this.props.thread || null;
+        var member = null;
+        if (thread !== null) {
+            member = this.props.users[Object.keys(thread.users)[1]];
+            // console.log(member.id,member.last-online)
+        }
         if (!(thread && thread.details && thread.details.image)) {
             return ("Loading Conversation....");
         }
+
         return (
             <div className="col-sm-8 conversation">
                 <div className="row heading">
@@ -84,7 +95,11 @@ class Conversations extends Component {
                     </div>
                     <div className="col-sm-8 col-xs-7 heading-name">
                         <a className="heading-name-meta">{thread.details.name}</a>
-                        {/*<span className="heading-online">Online</span>*/}
+                        <span className="heading-online">Last seen at
+                            <Moment fromNow withTitle format="HH:mm"
+                                    titleFormat="YYYY-MM-DD HH:mm">{}</Moment>
+                        </span>
+
                     </div>
                     <div className="col-sm-1 col-xs-1  heading-dot pull-right">
                         <i className="fa fa-ellipsis-v fa-2x  pull-right" aria-hidden="true"></i>
@@ -95,7 +110,7 @@ class Conversations extends Component {
                     {Object.entries(thread.messages).length > 19 ?
                         <div className="row message-previous">
                             <div className="col-sm-12 previous">
-                                <a id="ankitjain28" name="20">
+                                <a id="ankitjain28" name="20" onClick={this.getPreviousMessages}>
                                     Show Previous Message!
                                 </a>
                             </div>
@@ -176,8 +191,10 @@ export default connect(
         return {
             id: state.thread.open,
             user: state.user,
+            users: state.user.users,
+            open: state.thread.open,
             thread
         };
     },
-    {sendMessage}
+    {sendMessage, getPreviousMessages}
 )(Conversations);

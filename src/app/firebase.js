@@ -11,13 +11,17 @@ export const Firebase = firebase;
 export const FirebaseDB = firebase.database();
 let listeners = [];
 
-export async function addEventListener(ref, callback, key = null, paginate = null) {
+export async function addEventListener(ref, callback, key = null, paginate = null, previous = null) {
     if (listeners.indexOf(ref) > -1) {
         return;
     }
     listeners.push(ref);
     let newRef = FirebaseDB.ref(ref);
+    // if (previous) {
+    //     newRef.limitToFirst(previous);
+    // }
     if (paginate) {
+        newRef.limitToFirst(10)
         newRef.limitToLast(paginate);
     }
     return await newRef.on('value', (snap) => {
