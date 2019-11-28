@@ -1,6 +1,6 @@
-import {THREAD_ACTIONS} from "../actions"
+import {THREAD_ACTIONS, USER_ACTIONS} from "../actions"
 import {loop, Cmd} from "redux-loop";
-import {createMyProfile} from "../actions/user";
+import {createThread} from "../actions/thread";
 import cloneDeep from "lodash/cloneDeep"
 import merge from "lodash/merge"
 
@@ -14,6 +14,14 @@ export default function thread(state = initial, action) {
             let newState = cloneDeep(state);
             newState.threads = findAndMerge(newState.threads, action.payload.id, "details", action.payload.details);
             return newState;
+        }
+
+        case THREAD_ACTIONS.SHOULD_CREATE_THREAD: {
+            // Firebase does not have my profile yet. I have to create my profile.
+            return loop(
+                cloneDeep(state),
+                Cmd.run(createThread, {args: [action.payload.threadData, action.payload.currentUser, action.payload.otherUserId, Cmd.dispatch]})
+            );
         }
 
         case THREAD_ACTIONS.GET_THREAD_USERS: {

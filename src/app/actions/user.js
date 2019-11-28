@@ -1,6 +1,7 @@
-import {once} from "../firebase";
+import {once, addEventListener} from "../firebase";
 import {firebaseNodes, BASE_URL, ENDPOINTS} from "../constants";
 import {createRecord} from "./firebase";
+import {attachEventListenersToThreads} from "./thread";
 
 const types = {
     GET_MY_PROFILE: "GET_MY_PROFILE",
@@ -20,8 +21,9 @@ export default types;
 export function getMyProfile(id, userFromWeb = null) {
     return (dispatch) => {
         dispatch({type: types.GET_MY_PROFILE_REQUEST, payload: {}});
-        once(firebaseNodes.USERS + id, (user) => {
+        addEventListener(firebaseNodes.USERS + id, (user) => {
             if (user) {
+                attachEventListenersToThreads(user.threads, id, dispatch);
                 dispatch({type: types.GET_MY_PROFILE, payload: {user, id}});
             } else {
                 let fromWeb = {

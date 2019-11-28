@@ -19,9 +19,9 @@ class Contacts extends Component {
     }
 
     componentWillMount() {
-        if (this.props.user.hasOwnProperty('threads')) {
+        /*if (this.props.user.hasOwnProperty('threads')) {
             this.props.attachEventListenersToThreads(this.props.user.threads, this.props.user.id)
-        }
+        }*/
     }
 
     onClickContactSingle(threadId) {
@@ -29,6 +29,7 @@ class Contacts extends Component {
     }
 
     render() {
+        console.log(this.props.user.threads);
         if (this.props.open_thread !== null && !this.props.open) {
             this.props.openThread(this.props.open_thread);
         }
@@ -52,10 +53,13 @@ class Contacts extends Component {
                     </div>
                     <div className="row sideBar">
                         {threads && Object.keys(threads).map(threadId => {
-                            if (threads[threadId].hasOwnProperty('messages') && Object.entries(threads[threadId].messages).length > 0) {
-                                return (
-                                    <ContactSingle key={threadId} id={threadId} onClick={this.onClickContactSingle}/>);
-                            }
+                            /*             if (threads[threadId].hasOwnProperty('messages') && Object.entries(threads[threadId].messages).length > 0) {
+                                             return (
+                                                 <ContactSingle key={threadId} id={threadId} onClick={this.onClickContactSingle}/>);
+                                         }*/
+                            return (
+                                <ContactSingle key={threadId} id={threadId} onClick={this.onClickContactSingle}/>
+                            );
                         })}
                     </div>
                 </div>
@@ -286,11 +290,12 @@ export default connect(
         if (threads !== null) {
             {
                 Object.keys(threads).map((thread, key) => {
-                    if (Object.keys(threads)[key] !== undefined && threads[Object.keys(threads)[key]].hasOwnProperty('messages') && Object.entries(threads[Object.keys(threads)[key]].messages).length > 0) {
+                    /* if (Object.keys(threads)[key] !== undefined && threads[Object.keys(threads)[key]].hasOwnProperty('messages') && Object.entries(threads[Object.keys(threads)[key]].messages).length > 0) {
 
-                        firstThread = Object.keys(threads)[key];
-                        return false;
-                    }
+
+                         return false;
+                     }*/
+                    firstThread = Object.keys(threads)[key];
                 })
             }
 

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import Moment from "react-moment";
 import cloneDeep from "lodash/cloneDeep"
-import {attachEventListenersToThreads, sendMessage, getPreviousMessages} from "../actions/thread"
+import {sendMessage, getPreviousMessages} from "../actions/thread"
 
 class Conversations extends Component {
 
@@ -76,8 +76,8 @@ class Conversations extends Component {
 
     render() {
         let thread = this.props.thread || null;
-        var member = null;
-        if (thread !== null) {
+        let member = null;
+        if (thread !== null && thread.hasOwnProperty("users")) {
             member = this.props.users[Object.keys(thread.users)[1]];
             // console.log(member.id,member.last-online)
         }
@@ -107,7 +107,7 @@ class Conversations extends Component {
                 </div>
                 <div className="row message" id="conversation">
                     {/*TODO: We need to maintain a total_messages prop in threads object to maintain show or hide "Show Previous Message" button*/}
-                    {Object.entries(thread.messages).length > 19 ?
+                    {/*{Object.entries(thread.messages).length > 19 ?
                         <div className="row message-previous">
                             <div className="col-sm-12 previous">
                                 <a id="ankitjain28" name="20" onClick={this.getPreviousMessages}>
@@ -115,7 +115,7 @@ class Conversations extends Component {
                                 </a>
                             </div>
                         </div> : null
-                    }
+                    }*/}
 
                     {thread.messages && Object.keys(thread.messages).map((message, id) => {
                         return this.renderSingleMessage(thread.messages[message], message);

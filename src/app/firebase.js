@@ -20,8 +20,7 @@ export async function addEventListener(ref, callback, key = null, paginate = nul
     // if (previous) {
     //     newRef.limitToFirst(previous);
     // }
-    if (paginate) {
-        newRef.limitToFirst(10)
+    if (paginate !== null) {
         newRef.limitToLast(paginate);
     }
     return await newRef.on('value', (snap) => {
@@ -38,6 +37,30 @@ export async function once(ref, callback, key = null) {
         callback(snap.val(), key);
     })
 }
+/*
+
+export async function existsByKey(ref, child, value, callback, error) {
+    return await FirebaseDB.ref(ref).orderByChild(child).orderByKey().equalTo(value).once('value', (snap) => {
+        console.log("=====>", snap.val(), snap.exists());
+
+        if (snap.exists()) {
+            callback(snap.val());
+        } else {
+            // error(snap);
+        }
+    });
+}
+
+export async function existsByChild(ref, child, value, callback, error) {
+    return await FirebaseDB.ref(ref).orderByChild(child).equalTo(value).once('value', (snap) => {
+        if (snap.exists()) {
+            callback(snap.val());
+        } else {
+            error(snap)
+        }
+    });
+}
+*/
 
 export function create(ref, data, success = null, failed = null) {
     return FirebaseDB.ref(ref).set(data, function (error) {
@@ -55,7 +78,7 @@ export function create(ref, data, success = null, failed = null) {
     });
 }
 
-export function createBulk(refs, data, success = null, failed = null) {
+export function createBulk(refs, data, success = null, failed = null, key = null) {
     let updates = {};
     refs.forEach((ref) => {
         updates[ref] = data;
@@ -69,7 +92,7 @@ export function createBulk(refs, data, success = null, failed = null) {
         } else {
             // Data saved successfully!
             if (success != null) {
-                success();
+                success(key);
             }
         }
     });

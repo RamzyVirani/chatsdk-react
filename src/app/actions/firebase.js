@@ -4,10 +4,12 @@ import {USER_ACTIONS} from "./index"
 
 
 export function createRecord(ref, data, key = null, success = null, failed = null) {
+    let new_key = key;
     if (key == null) {
-        key = "/" + FirebaseDB.ref(ref).push().key;
+        new_key = FirebaseDB.ref(ref).push().key;
+        key = "/" + new_key;
     }
-    return createBulk([ref + key], data, success, failed);
+    return createBulk([ref + key], data, success, failed, new_key);
 }
 
 export function createBulkRecords(refs, data, key = null, success, failed) {
@@ -18,6 +20,11 @@ export function createBulkRecords(refs, data, key = null, success, failed) {
         return ref + key;
     });
     return createBulk(refs, data, success, failed)
+}
+
+export function createKey(ref) {
+    let key = "/" + FirebaseDB.ref(ref).push().key;
+    return key;
 }
 
 /*export function getProfile(id) {

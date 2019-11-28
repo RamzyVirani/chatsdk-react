@@ -11,6 +11,7 @@ export const firebaseNodes = {
     THREAD_DETAILS: "/details",
     THREAD_LAST_MESSAGE: "/lastMessage",
     THREAD_MESSAGES: "/messages",
+    USER_THREADS: "/threads/",
 };
 
 export const firebaseConfig = {
