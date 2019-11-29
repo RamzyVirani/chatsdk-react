@@ -19,9 +19,9 @@ class Conversations extends Component {
     }
 
     scrollToBottom() {
-        if (!!this.el) {
+        /*if (!!this.el) {
             this.el.scrollIntoView({behavior: 'smooth'});
-        }
+        }*/
     }
 
     componentDidMount() {
