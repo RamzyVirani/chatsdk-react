@@ -1,4 +1,4 @@
-import {USER_ACTIONS} from "../actions"
+import {USER_ACTIONS, THREAD_ACTIONS} from "../actions"
 import {loop, Cmd} from "redux-loop";
 import {createMyProfile} from "../actions/user";
 
@@ -15,6 +15,13 @@ export default function user(state = {}, action) {
             };
         }
         case USER_ACTIONS.GET_MY_PROFILE_FAILED: {
+            // Firebase does not have my profile yet. I have to create my profile.
+            return loop(
+                state,
+                Cmd.run(createMyProfile, {args: [action.payload.user, Cmd.dispatch]})
+            );
+        }
+        case THREAD_ACTIONS.SHOULD_CREATE_USER: {
             // Firebase does not have my profile yet. I have to create my profile.
             return loop(
                 state,

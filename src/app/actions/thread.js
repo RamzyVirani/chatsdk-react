@@ -26,6 +26,8 @@ const types = {
     CREATE_THREAD_FAILED: "CREATE_THREAD_FAILED",
 
     SHOULD_CREATE_THREAD: "SHOULD_CREATE_THREAD",
+
+    SHOULD_CREATE_USER: "SHOULD_CREATE_USER"
 };
 
 export default types;
@@ -35,19 +37,31 @@ export function attachEventListenerToThreadsRef() {
     }
 }
 
-export function getOrCreateThreadsOtherParticipant(threads, threadData, otherUserId, currentUser) {
+export function getOrCreateThreadsOtherParticipant(threads, threadData, otherUserId, currentUser, otherUser) {
     return async (dispatch) => {
-        let create = true;
-        for (let threadKey in threads) {
-            await once(firebaseNodes.THREADS + threadKey + firebaseNodes.THREAD_USERS, (users, thread_id) => {
-                if (users != null && users.hasOwnProperty(otherUserId)) {
-                    create = false;
+
+        await once(firebaseNodes.USERS + otherUserId, async (user) => {
+            if (user) {
+                let create = true;
+                for (let threadKey in threads) {
+                    await once(firebaseNodes.THREADS + threadKey + firebaseNodes.THREAD_USERS, (users, thread_id) => {
+                        if (users != null && users.hasOwnProperty(otherUserId)) {
+                            create = false;
+                        }
+                    });
                 }
-            });
-        }
-        if (create) {
-            dispatch({type: types.SHOULD_CREATE_THREAD, payload: {threadData, otherUserId, currentUser}});
-        }
+                if (create) {
+                    dispatch({type: types.SHOULD_CREATE_THREAD, payload: {threadData, otherUserId, currentUser}});
+                }
+            } else {
+                let fromWeb = {
+                    id: otherUserId,
+                    meta: otherUser.meta,
+                };
+                console.log('fromweb:', fromWeb)
+                dispatch({type: types.SHOULD_CREATE_USER, payload: {user: fromWeb, otherUserId}});
+            }
+        });
     }
 }
 
