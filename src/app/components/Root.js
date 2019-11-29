@@ -68,7 +68,7 @@ class Root extends Component {
         this.props.getMyProfile(this.props.user.id, this.props.user);
         // }
         if (this.props.user.id != 2 && this.props.user.hasOwnProperty('threads')) {
-            this.props.getOrCreateThreadsOtherParticipant(this.props.user.threads, customer_thread_admin, 2, this.props.user)
+            this.props.getOrCreateThreadsOtherParticipant(this.props.user.threads, customer_thread_admin, 2, this.props.user, null)
         }
         if (customer_thread_painter != null && this.props.user.hasOwnProperty('threads')) {
             this.props.getOrCreateThreadsOtherParticipant(this.props.user.threads, customer_thread_painter, painter.id, this.props.user, painter)
