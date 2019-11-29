@@ -29,7 +29,6 @@ class Contacts extends Component {
     }
 
     render() {
-        console.log(this.props.user.threads);
         if (this.props.open_thread !== null && !this.props.open) {
             this.props.openThread(this.props.open_thread);
         }

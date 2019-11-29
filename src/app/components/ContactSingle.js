@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import Moment from "react-moment";
 import {DATE_FORMAT_OPTIONS} from "../constants"
+import {setThreadDetails} from "../helpers";
 
 
 class ContactSingle extends Component {
@@ -47,21 +48,7 @@ class ContactSingle extends Component {
 
 export default connect(
     (state, ownerProps) => {
-        let thread = state.thread.threads[ownerProps.id];
-        if (thread && thread.details && thread.users) {
-            // If group then thread.details.name would not be empty;
-            if (thread.details.name == "") {
-                let otherId;
-                for (let userid in thread.users) {
-                    if (userid != state.user.id) {
-                        otherId = userid;
-                        break;
-                    }
-                }
-                thread.details.name = state.user.users[otherId].meta.name;
-                thread.details.image = state.user.users[otherId].meta.pictureURL;
-            }
-        }
+        let thread = setThreadDetails(state.thread.threads[ownerProps.id], state.user.users, state.user.id);
         return {
             thread,
             user: state.user,

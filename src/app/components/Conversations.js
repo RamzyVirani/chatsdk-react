@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import Moment from "react-moment";
 import cloneDeep from "lodash/cloneDeep"
 import {sendMessage, getPreviousMessages} from "../actions/thread"
+import {getOtherUser, setThreadDetails} from "../helpers";
 
 class Conversations extends Component {
 
@@ -18,8 +19,7 @@ class Conversations extends Component {
     }
 
     scrollToBottom() {
-        // console.log()
-        if (this.el !== undefined) {
+        if (!!this.el) {
             this.el.scrollIntoView({behavior: 'smooth'});
         }
     }
@@ -78,10 +78,12 @@ class Conversations extends Component {
         let thread = this.props.thread || null;
         let member = null;
         if (thread !== null && thread.hasOwnProperty("users")) {
-            member = this.props.users[Object.keys(thread.users)[1]];
-            // console.log(member.id,member.last-online)
+            let memberId = getOtherUser(thread, this.props.user.id);
+            if (this.props.users && this.props.users.hasOwnProperty(memberId)) {
+                member = this.props.users[memberId];
+            }
         }
-        if (!(thread && thread.details && thread.details.image)) {
+        if (!(thread && thread.details && thread.details.image && member)) {
             return ("Loading Conversation....");
         }
 
@@ -173,21 +175,7 @@ class Conversations extends Component {
 
 export default connect(
     (state, ownerProps) => {
-        let thread = state.thread.threads[state.thread.open];
-        if (thread && thread.details && thread.users) {
-            // If group then thread.details.name would not be empty;
-            if (thread.details.name == "") {
-                let otherId;
-                for (let userid in thread.users) {
-                    if (userid != state.user.id) {
-                        otherId = userid;
-                        break;
-                    }
-                }
-                thread.details.name = state.user.users[otherId].meta.name;
-                thread.details.image = state.user.users[otherId].meta.pictureURL;
-            }
-        }
+        let thread = setThreadDetails(state.thread.threads[state.thread.open], state.user.users, state.user.id);
         return {
             id: state.thread.open,
             user: state.user,
