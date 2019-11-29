@@ -58,7 +58,6 @@ export function getOrCreateThreadsOtherParticipant(threads, threadData, otherUse
                     id: otherUserId,
                     meta: otherUser.meta,
                 };
-                console.log('fromweb:', fromWeb)
                 dispatch({type: types.SHOULD_CREATE_USER, payload: {user: fromWeb, otherUserId}});
             }
         });
