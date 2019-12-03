@@ -34,7 +34,6 @@ export function getMyProfile(id, userFromWeb = null) {
             }
         });
     }
-
 }
 
 export async function createMyProfile(profile, dispatch) {

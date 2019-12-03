@@ -15,7 +15,7 @@ import {loadState, saveState} from "./storage";
 import {Firebase, FirebaseDB} from "./firebase";
 
 export const history = createBrowserHistory({
-    basename: "/blue_painting/build/"
+    basename: "/build/"
 });
 
 const enhancer = compose(

@@ -6,6 +6,18 @@ import {setThreadDetails} from "../helpers";
 
 
 class ContactSingle extends Component {
+    constructor(props) {
+        super(props);
+        let thread = this.props.thread || null;
+        this.checkUnreadMesage = this.checkUnreadMesage.bind(this);
+        this.unread_count = [];
+    }
+
+    checkUnreadMesage(type) {
+        let message = this.props.thread.messages[type];
+        return message.read[this.props.user.id] && message.read[this.props.user.id].status == 0;
+    }
+
     render() {
         let text = null;
         let thread = this.props.thread || null;
@@ -17,6 +29,9 @@ class ContactSingle extends Component {
                 text = thread.messages[message].json_v2.text
                 return false;
             })
+        }
+        if (thread.messages) {
+            this.unread_count = Object.keys(thread.messages).filter(this.checkUnreadMesage);
         }
         return (
             <div className={this.props.id == this.props.open ? "row sideBar-body active" : "row sideBar-body"}
@@ -30,6 +45,8 @@ class ContactSingle extends Component {
                     <div className="row">
                         <div className="col-sm-8 col-xs-8 sideBar-name">
                             <span className="name-meta">{thread.details.name}</span>
+                            {this.unread_count.length > 0 ?
+                                <span className="count-meta">({this.unread_count.length})</span> : null}
                             <p className="text-meta">{text}</p>
                         </div>
                         <div className="col-sm-4 col-xs-4 pull-right sideBar-time">

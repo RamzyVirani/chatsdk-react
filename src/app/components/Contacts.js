@@ -15,6 +15,9 @@ class Contacts extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            unreadCount: 0
+        }
         this.onClickContactSingle = this.onClickContactSingle.bind(this);
     }
 

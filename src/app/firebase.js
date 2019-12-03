@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import {firebaseConfig, PAGINATION} from './constants';
+import cloneDeep from "lodash/cloneDeep";
 
 
 firebase.initializeApp(firebaseConfig);
@@ -37,6 +38,31 @@ export async function once(ref, callback, key = null) {
         callback(snap.val(), key);
     })
 }
+
+export async function updateOnce(ref, callback, userId) {
+    let readStatus = {status: 1};
+    return await FirebaseDB.ref(ref).once('value', (snap) => {
+        snap.forEach(function (child) {
+            child.child('/read/' + userId).ref.update(readStatus).then(function () {
+                // console.log('successfully updated')
+            }).catch(function () {
+                // console.log('failed updated')
+            });
+
+            /*FirebaseDB.ref(child.child('/read').ref).once('value', (snap) => {
+                console.log('snpa-val:', snap.val())
+                /!*if (snap.val().read[userId] !== 'undefined') {
+                    // snap.ref.update({read:});
+                }*!/
+            })*/
+            // let userId = cloneDeep(readStatus);
+            // console.log('child:', child.ref)
+            // ;
+            // callback(snap.val(), key);
+        })
+    });
+}
+
 /*
 
 export async function existsByKey(ref, child, value, callback, error) {

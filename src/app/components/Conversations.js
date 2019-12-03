@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import Moment from "react-moment";
 import cloneDeep from "lodash/cloneDeep"
-import {sendMessage, getPreviousMessages} from "../actions/thread"
+import {sendMessage, getPreviousMessages, readMessage} from "../actions/thread"
 import {getOtherUser, setThreadDetails} from "../helpers";
 
 class Conversations extends Component {
@@ -13,23 +13,25 @@ class Conversations extends Component {
         this.sendMessageOnEnter = this.sendMessageOnEnter.bind(this);
         this.setText = this.setText.bind(this);
         this.state = {
-            text: ""
+            text: "",
         };
         this.getPreviousMessages = this.getPreviousMessages.bind(this);
     }
 
     scrollToBottom() {
-        /*if (!!this.el) {
+        if (!!this.el) {
             this.el.scrollIntoView({behavior: 'smooth'});
-        }*/
+        }
     }
 
     componentDidMount() {
         this.scrollToBottom();
+        this.props.readMessage(this.props.id, this.props.user);
     }
 
     componentDidUpdate() {
         this.scrollToBottom();
+        this.props.readMessage(this.props.id, this.props.user);
     }
 
     getPreviousMessages(e) {
@@ -120,6 +122,7 @@ class Conversations extends Component {
                     }*/}
 
                     {thread.messages && Object.keys(thread.messages).map((message, id) => {
+                        // console('mesasge', thread.messages[message]);
                         return this.renderSingleMessage(thread.messages[message], message);
                     })}
 
@@ -184,5 +187,5 @@ export default connect(
             thread
         };
     },
-    {sendMessage, getPreviousMessages}
+    {sendMessage, getPreviousMessages, readMessage}
 )(Conversations);

@@ -1,4 +1,4 @@
-import {addEventListener, once, existsByKey} from '../firebase'
+import {addEventListener, once, existsByKey, updateOnce} from '../firebase'
 import {USER_ACTIONS} from "./index"
 import {firebaseNodes, PAGINATION} from "../constants"
 import {createRecord, createKey} from "./firebase";
@@ -42,7 +42,6 @@ export function getOrCreateThreadsOtherParticipant(threads, threadData, otherUse
         let create = true;
         await once(firebaseNodes.USERS + otherUserId, async (user) => {
             if (user) {
-                console.log('user:', user)
                 let threads_data = Object.keys(user.threads);
                 for (let i = 0; i < threads_data.length; i++) {
                     await once(firebaseNodes.THREADS + threads_data[i] + firebaseNodes.THREAD_USERS, (users, thread_id) => {
@@ -131,6 +130,15 @@ export function sendMessage(messageObj, threadId, sender) {
     }
 }
 
+export function readMessage(threadId, user) {
+    return (dispatch) => {
+        updateOnce(firebaseNodes.THREADS + threadId + firebaseNodes.THREAD_MESSAGES, (messages) => {
+            // Mark All read messages of current thread
+        }, user.id)
+    }
+
+}
+
 export async function createThread(thread, user, otherUserId, dispatch) {
 
     dispatch({type: types.CREATE_THREAD_REQUEST, payload: thread});
@@ -142,26 +150,8 @@ export async function createThread(thread, user, otherUserId, dispatch) {
                 // Successfully created a thread in other user profile.
             });
         });
-        /*if (thread.hasOwnProperty('messages')) {
-            for (let messageObj in thread.messages) {
-                await createRecord(firebaseNodes.THREADS + key + firebaseNodes.THREAD_MESSAGES, messageObj, null, () => {
-                    let lastMsg = {
-                        date: messageObj.date,
-                        type: messageObj.type,
-                        "user-firebase-id": messageObj["user-firebase-id"],
-                        userName: sender
-                    };
-                    createRecord(firebaseNodes.THREADS + key, lastMsg, firebaseNodes.THREAD_LAST_MESSAGE);
-                    console.log('message created...')
-                }, (error) => {
-                    console.log('message creattion failed...', error)
-                })
-            }
-        }*/
-        console.log('thread created successfully...', key)
         // dispatch({type: types.CREATE_THREAD, payload: {thread}});
     }, (error) => {
-        console.log('thread failed...', error)
         // dispatch({type: types.CREATE_THREAD_FAILED, payload: {error}});
     });
 }
