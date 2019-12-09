@@ -2,15 +2,22 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Contacts from "./Contacts";
 import Conversations from "./Conversations";
-import {getMyProfile} from "../actions/user";
+import {getMyProfile, setOnline} from "../actions/user";
 import {createThread, attachEventListenerToThreadsRef, getOrCreateThreadsOtherParticipant} from "../actions/thread";
-import cloneDeep from "lodash/cloneDeep";
+
 
 class Root extends Component {
 
+    onFocus = () => {
+        console.log('on focus')
+    }
+    onBlur = () => {
+        console.log('on blur')
+    }
 
     componentWillMount() {
-
+        window.addEventListener("focus", this.onFocus);
+        window.addEventListener("blur", this.onBlur);
         let user_id = this.props.user.id;
         let customer_thread_admin = {
             "details": {
@@ -66,6 +73,9 @@ class Root extends Component {
         // if (this.props.user.fromWeb) {
         // fromWeb will be true when we will set the state from php.
         this.props.getMyProfile(this.props.user.id, this.props.user);
+        if (this.props.user.hasOwnProperty('id')) {
+            this.props.setOnline(this.props.user.id);
+        }
         // }
         if (this.props.user.id != 2 && this.props.user.hasOwnProperty('threads')) {
             this.props.getOrCreateThreadsOtherParticipant(this.props.user.threads, customer_thread_admin, 2, this.props.user, null)
@@ -103,6 +113,7 @@ export default connect(
         };
     },
     {
+        setOnline,
         getMyProfile,
         createThread,
         attachEventListenerToThreadsRef,

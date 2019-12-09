@@ -37,6 +37,14 @@ export default function user(state = {}, action) {
             newState["users"][action.payload.id] = action.payload;
             return newState;
         }
+        case USER_ACTIONS.GET_ONLINE_USERS: {
+            let newState = {...state};
+            if (!newState.hasOwnProperty("online")) {
+                newState["online"] = {};
+            }
+            newState["online"] = action.payload;
+            return newState;
+        }
 
         default:
             return state;

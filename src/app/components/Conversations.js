@@ -12,15 +12,31 @@ class Conversations extends Component {
         this.sendMessage = this.sendMessage.bind(this);
         this.sendMessageOnEnter = this.sendMessageOnEnter.bind(this);
         this.setText = this.setText.bind(this);
+        this.checkOnline = this.checkOnline.bind(this);
+        this.checkMessageStatus = this.checkMessageStatus.bind(this);
         this.state = {
             text: "",
         };
         this.getPreviousMessages = this.getPreviousMessages.bind(this);
     }
 
+    checkMessageStatus(read, currentId) {
+        let status = false;
+        Object.keys(read).map(function (user_id) {
+            if (user_id != currentId && read[user_id].status == 1) {
+                status = true;
+            }
+        });
+        return status;
+    }
+
     scrollToBottom() {
         if (!!this.el) {
-            this.el.scrollIntoView({behavior: 'smooth'});
+            var target = document.getElementById("messages-bottom");
+            if (target !== 'undefined') {
+                target.parentNode.scrollTop = target.offsetTop;
+            }
+            // this.el.scrollIntoView({behavior: 'smooth'});
         }
     }
 
@@ -76,8 +92,13 @@ class Conversations extends Component {
         })
     }
 
+    checkOnline(user_id) {
+        return user_id != this.props.user.id;
+    }
+
     render() {
         let thread = this.props.thread || null;
+        let usersKey = null;
         let member = null;
         if (thread !== null && thread.hasOwnProperty("users")) {
             let memberId = getOtherUser(thread, this.props.user.id);
@@ -88,7 +109,9 @@ class Conversations extends Component {
         if (!(thread && thread.details && thread.details.image && member)) {
             return ("Loading Conversation....");
         }
-
+        if (thread.users) {
+            usersKey = Object.keys(thread.users).find(this.checkOnline);
+        }
         return (
             <div className="col-sm-8 conversation">
                 <div className="row heading">
@@ -99,10 +122,16 @@ class Conversations extends Component {
                     </div>
                     <div className="col-sm-8 col-xs-7 heading-name">
                         <a className="heading-name-meta">{thread.details.name}</a>
-                        <span className="heading-online">Last seen at
+                        {/*<span className="heading-online">Last seen at
                             <Moment fromNow withTitle format="HH:mm"
                                     titleFormat="YYYY-MM-DD HH:mm">{}</Moment>
-                        </span>
+                        </span>*/}
+                        {this.props.user.online.hasOwnProperty(usersKey) && this.props.user.online[usersKey].status == 1 ?
+                            <span className="heading-online">Online</span> :
+                            this.props.user.online.hasOwnProperty(usersKey) ?
+                                <span className="heading-online">{"Last seen at "}
+                                    <Moment startOf="hour" fromNow>{this.props.user.online[usersKey].time}</Moment>
+                        </span> : null}
 
                     </div>
                     <div className="col-sm-1 col-xs-1  heading-dot pull-right">
@@ -158,6 +187,7 @@ class Conversations extends Component {
             container = "message-main-sender";
             text = "sender";
         }
+        let status = this.checkMessageStatus(message.read, this.props.user.id);
 
         return (
             <div className="row message-body" key={id}>
@@ -166,6 +196,12 @@ class Conversations extends Component {
                         <div className="message-text">
                             {message.json_v2 && message.json_v2.text}
                         </div>
+                        <div className={"message-status " + status}>
+                            {status ? <i className="fa fa-check seen"></i> :
+                                <i className="fa fa-check"></i>}
+
+                        </div>
+
                         <span className="message-time pull-right">
                         <Moment fromNow withTitle format="HH:mm"
                                 titleFormat="YYYY-MM-DD HH:mm">{message.date}</Moment>

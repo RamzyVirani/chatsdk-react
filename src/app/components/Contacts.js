@@ -50,6 +50,8 @@ class Contacts extends Component {
                             <div className="heading-avatar-icon">
                                 <img src={image ? image : "http://shurl.esy.es/y"}/>
                                 {" " + name}
+                                {this.props.user.hasOwnProperty('online') && this.props.user.online[this.props.user.id].status == 1 ?
+                                    <span className="show-online"></span> : null}
                             </div>
                         </div>
                     </div>

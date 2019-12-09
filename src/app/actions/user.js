@@ -13,6 +13,14 @@ const types = {
     CREATE_MY_PROFILE: "CREATE_MY_PROFILE",
     CREATE_MY_PROFILE_REQUEST: "CREATE_MY_PROFILE_REQUEST",
     CREATE_MY_PROFILE_FAILED: "CREATE_MY_PROFILE_FAILED",
+
+    CREATE_ONLINE: "CREATE_ONLINE",
+    CREATE_ONLINE_REQUEST: "CREATE_ONLINE_REQUEST",
+    CREATE_ONLINE_FAILED: "CREATE_ONLINE_FAILED",
+
+    GET_ONLINE_USERS: "GET_ONLINE_USERS",
+    GET_ONLINE_USERS_REQUEST: "GET_ONLINE_USERS_REQUEST",
+    GET_ONLINE_USERS_FAILED: "GET_ONLINE_USERS_FAILED",
 };
 
 export default types;
@@ -43,4 +51,20 @@ export async function createMyProfile(profile, dispatch) {
     }, (error) => {
         dispatch({type: types.CREATE_MY_PROFILE_FAILED, payload: {error}});
     });
+}
+
+export function setOnline(user_id) {
+    return (dispatch) => {
+        dispatch({type: types.CREATE_ONLINE_REQUEST, payload: {}});
+        let obj = {
+            time: new Date().getTime(),
+            status: 1
+        }
+        createRecord(firebaseNodes.ONLINE, obj, user_id, (key) => {
+            dispatch({type: types.CREATE_ONLINE, payload: {}});
+        }, (error) => {
+            dispatch({type: types.CREATE_ONLINE_FAILED, payload: {}});
+        });
+    }
+
 }

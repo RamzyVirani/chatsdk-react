@@ -10,6 +10,7 @@ class ContactSingle extends Component {
         super(props);
         let thread = this.props.thread || null;
         this.checkUnreadMesage = this.checkUnreadMesage.bind(this);
+        this.checkOnline = this.checkOnline.bind(this);
         this.unread_count = [];
     }
 
@@ -18,8 +19,13 @@ class ContactSingle extends Component {
         return message.read[this.props.user.id] && message.read[this.props.user.id].status == 0;
     }
 
+    checkOnline(user_id) {
+        return user_id != this.props.user.id;
+    }
+
     render() {
         let text = null;
+        let usersKey = null;
         let thread = this.props.thread || null;
         if (!(thread && thread.details && thread.details.image)) {
             return "";
@@ -33,12 +39,17 @@ class ContactSingle extends Component {
         if (thread.messages) {
             this.unread_count = Object.keys(thread.messages).filter(this.checkUnreadMesage);
         }
+        if (thread.users) {
+            usersKey = Object.keys(thread.users).find(this.checkOnline);
+        }
         return (
             <div className={this.props.id == this.props.open ? "row sideBar-body active" : "row sideBar-body"}
                  onClick={() => this.props.onClick(this.props.id)}>
                 <div className="col-sm-3 col-xs-3 sideBar-avatar">
                     <div className="avatar-icon">
                         <img src={thread.details.image}/>
+                        {this.props.user.online.hasOwnProperty(usersKey) && this.props.user.online[usersKey].status == 1 ?
+                            <span className="show-online"></span> : null}
                     </div>
                 </div>
                 <div className="col-sm-9 col-xs-9 sideBar-main">

@@ -3,6 +3,7 @@ import {USER_ACTIONS} from "./index"
 import {firebaseNodes, PAGINATION} from "../constants"
 import {createRecord, createKey} from "./firebase";
 
+
 const types = {
     GET_THREADS: "GET_THREADS",
     GET_THREADS_REQUEST: "GET_THREADS_REQUEST",
@@ -45,12 +46,11 @@ export function getOrCreateThreadsOtherParticipant(threads, threadData, otherUse
                 let threads_data = Object.keys(user.threads);
                 for (let i = 0; i < threads_data.length; i++) {
                     await once(firebaseNodes.THREADS + threads_data[i] + firebaseNodes.THREAD_USERS, (users, thread_id) => {
-                        if (users != null && users.hasOwnProperty(otherUserId)) {
+                        if (users != null && users.hasOwnProperty(currentUser.id)) {
                             create = false;
                         }
                     });
                 }
-
                 if (create) {
                     dispatch({type: types.SHOULD_CREATE_THREAD, payload: {threadData, otherUserId, currentUser}});
                 }
@@ -91,7 +91,11 @@ export function attachEventListenersToThreads(threads, myUserId, dispatch) {
         addEventListener(firebaseNodes.THREADS + threadKey + firebaseNodes.THREAD_MESSAGES, (message, thread_id) => {
             dispatch({type: types.GET_MESSAGE, payload: {messages: message, thread_id},})
         }, threadKey, PAGINATION.MESSAGES)
+
     }
+    addEventListener(firebaseNodes.ONLINE, (online_users) => {
+        dispatch({type: USER_ACTIONS.GET_ONLINE_USERS, payload: online_users})
+    })
     // }
 }
 

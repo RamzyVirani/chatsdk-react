@@ -109,10 +109,18 @@ body {
 }
 
 .heading-online {
-    display: none;
+    display: block;
     padding: 0 5px;
     font-size: 12px;
     color: #93918f;
+    animation: cssAnimation 0s 3s forwards;
+    visibility: hidden;
+}
+
+@keyframes cssAnimation {
+    to {
+        visibility: visible;
+    }
 }
 
 .heading-compose {
@@ -487,6 +495,34 @@ body {
     border: none;
     text-indent: 5px;
     box-shadow: none;
+}
+
+div.message-status {
+    text-align: right;
+}
+
+div.message-status .fa-check.seen {
+    color: #00a5f4;
+}
+
+span.show-online {
+    background: #00bfa5;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    top: 15px;
+    left: 33px;
+}
+
+.avatar-icon span.show-online {
+    background: #00bfa5;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    top: 15px;
+    left: 15px;
 }
 
 @media screen and (max-width: 700px) {
