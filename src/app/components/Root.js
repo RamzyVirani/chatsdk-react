@@ -4,20 +4,56 @@ import Contacts from "./Contacts";
 import Conversations from "./Conversations";
 import {getMyProfile, setOnline} from "../actions/user";
 import {createThread, attachEventListenerToThreadsRef, getOrCreateThreadsOtherParticipant} from "../actions/thread";
+import cloneDeep from "lodash/cloneDeep";
 
+var hidden, visibilityChange;
+if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support
+    hidden = "hidden";
+    visibilityChange = "visibilitychange";
+} else if (typeof document.msHidden !== "undefined") {
+    hidden = "msHidden";
+    visibilityChange = "msvisibilitychange";
+} else if (typeof document.webkitHidden !== "undefined") {
+    hidden = "webkitHidden";
+    visibilityChange = "webkitvisibilitychange";
+}
 
 class Root extends Component {
-
-    onFocus = () => {
-        console.log('on focus')
+    constructor(props) {
+        super(props)
+        this.checkFocus = this.checkFocus.bind(this);
     }
-    onBlur = () => {
-        console.log('on blur')
+
+    checkFocus = function () {
+        if (document[hidden]) {
+            if (this.props.user.hasOwnProperty('id')) {
+                let obj = {
+                    time: new Date().getTime(),
+                    status: 0
+                }
+                this.props.setOnline(this.props.user.id, obj);
+            }
+        } else {
+            if (this.props.user.hasOwnProperty('id')) {
+                let obj = {
+                    time: new Date().getTime(),
+                    status: 1
+                }
+                this.props.setOnline(this.props.user.id, obj);
+            }
+        }
     }
 
     componentWillMount() {
-        window.addEventListener("focus", this.onFocus);
-        window.addEventListener("blur", this.onBlur);
+        if (typeof document.addEventListener === "undefined" || hidden === undefined) {
+
+        } else {
+            // Handle page visibility change
+            document.addEventListener(visibilityChange, this.checkFocus, false);
+        }
+        // window.addEventListener("focus", this.checkFocus);
+        // window.addEventListener("blur", this.checkFocus);
+
         let user_id = this.props.user.id;
         let customer_thread_admin = {
             "details": {
@@ -74,7 +110,11 @@ class Root extends Component {
         // fromWeb will be true when we will set the state from php.
         this.props.getMyProfile(this.props.user.id, this.props.user);
         if (this.props.user.hasOwnProperty('id')) {
-            this.props.setOnline(this.props.user.id);
+            let obj = {
+                time: new Date().getTime(),
+                status: 1
+            }
+            this.props.setOnline(this.props.user.id, obj);
         }
         // }
         if (this.props.user.id != 2 && this.props.user.hasOwnProperty('threads')) {
@@ -90,6 +130,7 @@ class Root extends Component {
 
         this.props.attachEventListenerToThreadsRef();
     }
+
 
     render() {
         return (

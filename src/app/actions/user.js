@@ -53,14 +53,10 @@ export async function createMyProfile(profile, dispatch) {
     });
 }
 
-export function setOnline(user_id) {
+export function setOnline(user_id, data) {
     return (dispatch) => {
         dispatch({type: types.CREATE_ONLINE_REQUEST, payload: {}});
-        let obj = {
-            time: new Date().getTime(),
-            status: 1
-        }
-        createRecord(firebaseNodes.ONLINE, obj, user_id, (key) => {
+        createRecord(firebaseNodes.ONLINE, data, user_id, (key) => {
             dispatch({type: types.CREATE_ONLINE, payload: {}});
         }, (error) => {
             dispatch({type: types.CREATE_ONLINE_FAILED, payload: {}});
