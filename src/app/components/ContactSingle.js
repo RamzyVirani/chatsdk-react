@@ -43,33 +43,16 @@ class ContactSingle extends Component {
             usersKey = Object.keys(thread.users).find(this.checkOnline);
         }
         return (
-            <div className={this.props.id == this.props.open ? "row sideBar-body active" : "row sideBar-body"}
-                 onClick={() => this.props.onClick(this.props.id)}>
-                <div className="col-sm-3 col-xs-3 sideBar-avatar">
-                    <div className="avatar-icon">
-                        <img src={thread.details.image}/>
-                        {this.props.user.online.hasOwnProperty(usersKey) && this.props.user.online[usersKey].status == 1 ?
-                            <span className="show-online"></span> : null}
-                    </div>
-                </div>
-                <div className="col-sm-9 col-xs-9 sideBar-main">
-                    <div className="row">
-                        <div className="col-sm-8 col-xs-8 sideBar-name">
-                            <span className="name-meta">{thread.details.name}</span>
-                            {this.unread_count.length > 0 ?
-                                <span className="count-meta">({this.unread_count.length})</span> : null}
-                            <p className="text-meta">{text}</p>
-                        </div>
-                        <div className="col-sm-4 col-xs-4 pull-right sideBar-time">
-                        <span className="time-meta pull-right">
-                            {thread.lastMessage &&
-                            <Moment fromNow withTitle format="YYYY-MM-DD"
-                                    titleFormat="YYYY-MM-DD HH:mm">{thread.lastMessage.date}</Moment>}
-                        </span>
-                        </div>
-                    </div>
-                </div>
-            </div>);
+            <li className={this.props.id == this.props.open ? "active" : null}
+                onClick={() => this.props.onClick(this.props.id)}>
+                <h4 className={this.props.user.online.hasOwnProperty(usersKey) && this.props.user.online[usersKey].status == 1 ? "title-user active" : "title-user"}>{thread.details.name}</h4>
+                <div className="time-user">{thread.lastMessage &&
+                <Moment fromNow withTitle format="DD-MM-YYYY"
+                        titleFormat="DD-MM-YYYY HH:mm">{thread.lastMessage.date}</Moment>}</div>
+                <p className="status-user">{text}</p>
+                {this.unread_count.length > 0 ? <div className="msg-user">{this.unread_count.length}</div> : null}
+            </li>
+        );
 
     }
 }

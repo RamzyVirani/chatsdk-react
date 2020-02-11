@@ -18,9 +18,7 @@ export async function addEventListener(ref, callback, key = null, paginate = nul
     }
     listeners.push(ref);
     let newRef = FirebaseDB.ref(ref);
-    // if (previous) {
-    //     newRef.limitToFirst(previous);
-    // }
+
     if (paginate !== null) {
         newRef.limitToLast(paginate);
     }

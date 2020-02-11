@@ -2,9 +2,9 @@ html,
 body,
 div,
 span {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
+    /*height: 100%;*/
+    /*width: 100%;*/
+    /*overflow: hidden;*/
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -503,6 +503,12 @@ div.message-status {
 
 div.message-status .fa-check.seen {
     color: #00a5f4;
+    margin-bottom: 20px;
+}
+
+div.message-status .fa-check {
+    color: #00a5f4;
+    margin-bottom: 20px;
 }
 
 span.show-online {

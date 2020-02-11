@@ -5,6 +5,7 @@ import {ConnectedRouter} from 'connected-react-router'
 import {history} from "./app/store";
 
 import Root from "./app/components/Root";
+import Chat from "./app/components/Chat";
 
 class App extends Component {
 
@@ -13,6 +14,7 @@ class App extends Component {
             <ConnectedRouter history={history}>
                 <Switch>
                     <Route exact path={["/", "/conversation/:conversation"]} component={Root}/>
+                    {/*<Route exact path={["/chat"]} component={Chat}/>*/}
                 </Switch>
 
             </ConnectedRouter>

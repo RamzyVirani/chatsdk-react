@@ -1,0 +1,400 @@
+@font-face {
+    font-family: 'Conv_proximanova-bold';
+    src: url('../fonts/proximanova-bold.eot');
+    src: url('../fonts/proximanova-bold.woff') format('woff'),
+    url('../fonts/proximanova-bold.ttf') format('truetype'),
+    url('../fonts/proximanova-bold.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Conv_proximanova-light';
+    src: url('../fonts/proximanova-light.eot');
+    src: url('../fonts/proximanova-light.woff') format('woff'),
+    url('../fonts/proximanova-light.ttf') format('truetype'),
+    url('../fonts/proximanova-light.svg') format('svg');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Conv_proximanova-regular';
+    src: url('../fonts/proximanova-regular.eot');
+    src: url('../fonts/proximanova-regular.woff') format('woff'),
+    url('../fonts/proximanova-regular.ttf') format('truetype'),
+    url('../fonts/proximanova-regular.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Conv_proximanova-semibold';
+    src: url('../fonts/proximanova-semibold.eot');
+    src: url('../fonts/proximanova-semibold.woff') format('woff'),
+    url('../fonts/proximanova-semibold.ttf') format('truetype'),
+    url('../fonts/proximanova-semibold.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.side-clientinfo {
+    background: #fff;
+    position: relative;
+}
+
+.msg-section {
+    padding: 30px 30px 20px;
+    border-bottom: 1px solid #eff0f4;
+    margin-bottom: 20px;
+}
+
+.side-clientinfo h3 {
+    display: inline-block;
+    font-size: 36px;
+    color: #3751ff;
+    margin: 0px;
+    line-height: 38px;
+    font-family: 'Conv_proximanova-semibold';
+}
+
+.edit-cta {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+}
+
+.edit-cta i {
+    color: #cccccc;
+    font-size: 20px;
+}
+
+.form-div {
+    position: relative;
+    margin-top: 20px;
+}
+
+.form-div input[type="text"] {
+    width: 100%;
+    height: 50px;
+    padding: 10px 0px 10px 50px;
+    border-radius: 25px;
+    border: 1px solid #eaeaea;
+    color: #afb6c5;
+    outline: none;
+}
+
+.form-div button[type="submit"] {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    background: transparent;
+    height: 50px;
+    border: 0px;
+    width: 50px;
+    border-radius: 25px;
+    color: #afb6c5;
+    font-size: 20px;
+    outline: none;
+}
+
+.userdirectory {
+    height: 540px;
+    overflow-y: scroll;
+}
+
+.userdirectory ul.users-list {
+    padding: 0px;
+    margin: 0px;
+    list-style: none;
+}
+
+.userdirectory ul.users-list li {
+    position: relative;
+    height: 90px;
+    padding: 20px 30px;
+    background: #fff;
+    transition: linear .3s;
+    border-top: 1px solid #eff0f5;
+    cursor: pointer;
+}
+
+.userdirectory ul.users-list li.notice {
+    background: #f9fafc;
+    transition: linear .3s;
+}
+
+.userdirectory ul.users-list li.active {
+    background: #3751ff;
+    transition: linear .3s;
+}
+
+.userdirectory ul.users-list li:hover {
+    background: #3751ff;
+    transition: linear .3s;
+}
+
+.userdirectory ul.users-list li:hover .title-user, .userdirectory ul.users-list li.active .title-user, .userdirectory ul.users-list li:hover .status-user, .userdirectory ul.users-list li.active .status-user,
+.userdirectory ul.users-list li:hover .time-user, .userdirectory ul.users-list li.active .time-user {
+    color: #fff;
+    transition: linear .3s;
+}
+
+.userdirectory ul.users-list li:hover .msg-user, .userdirectory ul.users-list li.active .msg-user {
+    background: #fff;
+    color: #3751ff;
+    transition: linear .3s;
+}
+
+.userdirectory ul.users-list li .title-user {
+    color: #39414e;
+    font-size: 21px;
+    line-height: 26px;
+    font-family: 'Conv_proximanova-semibold';
+    margin: 0px;
+    transition: linear .3s;
+}
+
+.userdirectory ul.users-list li .title-user.active:after {
+    content: '';
+    background: #98de3a;
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    border-radius: 50%;
+    position: relative;
+    left: 10px;
+    top: -2px;
+}
+
+.userdirectory ul.users-list li .status-user {
+    color: #39414e;
+    font-size: 15px;
+    line-height: 26px;
+    font-family: 'Conv_proximanova-regular';
+    margin: 0px;
+}
+
+.userdirectory ul.users-list li .time-user {
+    color: #afb6c5;
+    font-size: 15px;
+    line-height: 26px;
+    font-family: 'Conv_proximanova-regular';
+    position: absolute;
+    top: 20px;
+    right: 30px;
+}
+
+.userdirectory ul.users-list li .msg-user {
+    color: #fff;
+    font-size: 14px;
+    font-family: 'Conv_proximanova-regular';
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    background: #3751ff;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    border-radius: 50%;
+}
+
+.user-messages {
+    background: #fff;
+    position: relative;
+}
+
+.header-top {
+    padding: 30px 30px 30px;
+    border-bottom: 1px solid #eff0f4;
+}
+
+.header-top h2 {
+    display: inline-block;
+    font-size: 30px;
+    color: #39414e;
+    margin: 0px;
+    line-height: 38px;
+    font-family: 'Conv_proximanova-semibold';
+}
+
+.header-top h2.active:after {
+    content: '';
+    background: #98de3a;
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    border-radius: 50%;
+    position: relative;
+    left: 10px;
+    top: -2px;
+}
+
+.arrows-right {
+    margin-top: 5px;
+    color: #39414e;
+    font-size: 20px;
+    float: right;
+}
+
+.body-message {
+    padding: 30px;
+    padding: 30px;
+    height: 620px;
+    overflow-y: scroll;
+    position: relative;
+}
+
+.user-content {
+    text-align: left;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.user-content .user-msg {
+    color: #39414e;
+    font-size: 16px;
+    font-family: 'Conv_proximanova-regular';
+    border: 1px solid #cccccc;
+    max-width: 55%;
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 10px 10px 10px 0px;
+    margin-bottom: 10px;
+}
+
+.user-content .user-timess {
+    display: block;
+    color: #afb6c5;
+    font-size: 14px;
+    font-family: 'Conv_proximanova-regular';
+}
+
+.admin-content {
+    text-align: right;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.admin-content .admin-msg {
+    color: #fff;
+    font-size: 16px;
+    font-family: 'Conv_proximanova-regular';
+    border: 1px solid #cccccc;
+    max-width: 55%;
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 10px 10px 0px 10px;
+    margin-bottom: 10px;
+    background: #3751ff;
+}
+
+.admin-content .admin-timess {
+    display: block;
+    color: #afb6c5;
+    font-size: 14px;
+    font-family: 'Conv_proximanova-regular';
+}
+
+.userdirectory::-webkit-scrollbar, .body-message::-webkit-scrollbar {
+    width: 2px;
+}
+
+.userdirectory::-webkit-scrollbar-track, .body-message::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px #eff0f4;
+}
+
+.userdirectory::-webkit-scrollbar-thumb, .body-message::-webkit-scrollbar-thumb {
+    background-color: #afb6c5;
+    outline: 1px solid #000;
+}
+
+.msg-box {
+    position: absolute;
+    width: 100%;
+    height: 80px;
+    left: 0px;
+    background: #fff;
+    bottom: 0px;
+    padding: 10px 30px;
+}
+
+.msg-box input.comments-section {
+    height: 60px;
+    border-radius: 42px;
+    border: 1px solid #cccccc;
+    width: 100%;
+    padding: 0px 20px;
+    outline: none;
+    font-size: 16px;
+    color: #39414e;
+    font-family: 'Conv_proximanova-regular';
+}
+
+.msg-box .form-sec {
+    position: relative;
+}
+
+.form-sec button[type="submit"], .form-sec button[type="button"] {
+    position: absolute;
+    top: 17px;
+    right: 20px;
+    background: transparent;
+    border: 0px;
+    outline: 0;
+}
+
+@media screen and (min-width: 568px) and (max-width: 1199px) {
+    .side-clientinfo h3 {
+        font-size: 26px;
+    }
+
+    .userdirectory ul.users-list li {
+        padding: 20px 20px;
+    }
+
+    .userdirectory ul.users-list li .time-user {
+        right: 20px;
+    }
+
+    .userdirectory ul.users-list li .msg-user {
+        right: 20px;
+    }
+
+    .userdirectory ul.users-list li .title-user {
+        font-size: 17px;
+    }
+
+    .user-content .user-msg {
+        font-size: 14px;
+        max-width: 85%;
+    }
+
+    .admin-content .admin-msg {
+        font-size: 14px;
+        max-width: 85%;
+    }
+
+    .user-content .user-timess {
+        font-size: 12px;
+    }
+
+    .msg-box {
+        height: 70px;
+    }
+
+    .msg-box input.comments-section {
+        font-size: 14px;
+        height: 50px;
+    }
+}
+
+div.message-status .fa-check.seen {
+    color: #00a5f4;
+}
+
+#messages-bottom {
+    display: block;
+    margin-top: 80px;
+}

@@ -36,7 +36,6 @@ class Conversations extends Component {
             if (target !== 'undefined') {
                 target.parentNode.scrollTop = target.offsetTop;
             }
-            // this.el.scrollIntoView({behavior: 'smooth'});
         }
     }
 
@@ -113,66 +112,40 @@ class Conversations extends Component {
             usersKey = Object.keys(thread.users).find(this.checkOnline);
         }
         return (
-            <div className="col-sm-8 conversation">
-                <div className="row heading">
-                    <div className="col-sm-2 col-md-1 col-xs-3 heading-avatar">
-                        <div className="heading-avatar-icon">
-                            <img src={thread.details.image}/>
-                        </div>
-                    </div>
-                    <div className="col-sm-8 col-xs-7 heading-name">
-                        <a className="heading-name-meta">{thread.details.name}</a>
-                        {/*<span className="heading-online">Last seen at
-                            <Moment fromNow withTitle format="HH:mm"
-                                    titleFormat="YYYY-MM-DD HH:mm">{}</Moment>
-                        </span>*/}
-                        {this.props.user.online.hasOwnProperty(usersKey) && this.props.user.online[usersKey].status == 1 ?
+            <div className="col-12 col-md-7 col-lg-7 col-xl-8">
+                <div className="user-messages">
+                    <div className="header-top">
+                        {/*                        {this.props.user.online.hasOwnProperty(usersKey) && this.props.user.online[usersKey].status == 1 ?
                             <span className="heading-online">Online</span> :
                             this.props.user.online.hasOwnProperty(usersKey) ?
                                 <span className="heading-online">{"Last seen at "}
                                     <Moment startOf="hour" fromNow>{this.props.user.online[usersKey].time}</Moment>
-                        </span> : null}
-
+                          </span> : null}*/}
+                        <h2 className={this.props.user.online.hasOwnProperty(usersKey) && this.props.user.online[usersKey].status == 1 ? "active" : null}>{thread.details.name}</h2>
+                        <div className="arrows-right">
+                            <i className="fas fa-ellipsis-h"></i>
+                        </div>
                     </div>
-                    <div className="col-sm-1 col-xs-1  heading-dot pull-right">
-                        <i className="fa fa-ellipsis-v fa-2x  pull-right" aria-hidden="true"></i>
+                    <div className="body-message">
+                        {thread.messages && Object.keys(thread.messages).map((message, id) => {
+                            return this.renderSingleMessage(thread.messages[message], message);
+                        })}
+                        <span id="messages-bottom" ref={el => {
+                            this.el = el;
+                        }}/>
                     </div>
-                </div>
-                <div className="row message" id="conversation">
-                    {/*TODO: We need to maintain a total_messages prop in threads object to maintain show or hide "Show Previous Message" button*/}
-                    {/*{Object.entries(thread.messages).length > 19 ?
-                        <div className="row message-previous">
-                            <div className="col-sm-12 previous">
-                                <a id="ankitjain28" name="20" onClick={this.getPreviousMessages}>
-                                    Show Previous Message!
-                                </a>
-                            </div>
-                        </div> : null
-                    }*/}
-
-                    {thread.messages && Object.keys(thread.messages).map((message, id) => {
-                        // console('mesasge', thread.messages[message]);
-                        return this.renderSingleMessage(thread.messages[message], message);
-                    })}
-
-                    <span id="messages-bottom" ref={el => {
-                        this.el = el;
-                    }}/>
-                </div>
-                <div className="row reply">
-                    {/*<div className="col-sm-1 col-xs-1 reply-emojis">
-                        <i className="fa fa-smile-o fa-2x"></i>
-                    </div>*/}
-                    <div className="col-sm-11 col-xs-11 reply-main">
-                        <textarea className="form-control" rows="1" id="comment"
-                                  onChange={this.setText} onKeyDown={this.sendMessageOnEnter}
-                                  value={this.state.text}></textarea>
-                    </div>
-                    {/*<div className="col-sm-1 col-xs-1 reply-recording">
-                        <i className="fa fa-microphone fa-2x" aria-hidden="true"></i>
-                    </div>*/}
-                    <div className="col-sm-1 col-xs-1 reply-send" onClick={this.sendMessage}>
-                        <i className="fa fa-send fa-2x" aria-hidden="true"></i>
+                    <div className="msg-box">
+                        <div className="form-sec">
+                            <form action="">
+                                <input className="comments-section" type="text" name=""
+                                       placeholder="Type a message here" onChange={this.setText}
+                                       onKeyDown={this.sendMessageOnEnter}
+                                       value={this.state.text} required/>
+                                <button type="button" onClick={this.sendMessage}><img
+                                    src={window.location.origin + "/assets/images/arrow-submit.png"}/>
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -180,35 +153,31 @@ class Conversations extends Component {
     }
 
     renderSingleMessage(message, id) {
-        let container = "message-main-receiver";
-        let text = "receiver";
+        let container = "user-content";
+        let text = "user-msg";
+        let times = "user-timess";
 
         if (message["user-firebase-id"] == this.props.user.id) {
-            container = "message-main-sender";
-            text = "sender";
+            container = "admin-content";
+            text = "admin-msg";
+            times = "admin-timess";
         }
         let status = this.checkMessageStatus(message.read, this.props.user.id);
 
         return (
-            <div className="row message-body" key={id}>
-                <div className={["col-sm-12 " + container]}>
-                    <div className={text}>
-                        <div className="message-text">
-                            {message.json_v2 && message.json_v2.text}
-                        </div>
-                        <div className={"message-status " + status}>
-                            {status ? <i className="fa fa-check seen"></i> :
-                                <i className="fa fa-check"></i>}
+            <div className={container} key={id}>
+                <p className={text}>{message.json_v2 && message.json_v2.text}</p>
+                {/*<div className={"message-status " + status}>
+                    {status ? <i className="fa fa-check seen"></i> :
+                        <i className="fa fa-check"></i>}
 
-                        </div>
-
-                        <span className="message-time pull-right">
-                        <Moment fromNow withTitle format="HH:mm"
-                                titleFormat="YYYY-MM-DD HH:mm">{message.date}</Moment>
-                    </span>
-                    </div>
-                </div>
-            </div>);
+                </div>*/}
+                <span className={times}>
+                <Moment fromNow withTitle format="HH:mm" titleFormat="YYYY-MM-DD HH:mm">{message.date}</Moment>
+            </span>
+            </div>
+        )
+            ;
     }
 }
 

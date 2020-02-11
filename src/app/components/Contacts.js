@@ -22,9 +22,9 @@ class Contacts extends Component {
     }
 
     componentWillMount() {
-        /*if (this.props.user.hasOwnProperty('threads')) {
-            this.props.attachEventListenersToThreads(this.props.user.threads, this.props.user.id)
-        }*/
+        /*   if (this.props.user.hasOwnProperty('threads')) {
+               this.props.attachEventListenersToThreads(this.props.user.threads, this.props.user.id)
+           }*/
     }
 
     onClickContactSingle(threadId) {
@@ -37,250 +37,39 @@ class Contacts extends Component {
         }
         let user = this.props.user || null;
         let threads = this.props.threads || null;
-        let name = null, image = null;
-        if (user) {
+        let name = null;
+        let image = null;
+        if (user != null) {
             name = user.meta && user.meta.name;
             image = user.meta && user.meta.pictureURL;
         }
         return (
-            <div className="col-sm-4 side">
-                <div className="side-one">
-                    <div className="row heading">
-                        <div className="col-sm-12 col-xs-12 heading-avatar">
-                            <div className="heading-avatar-icon">
-                                <img src={image ? image : "http://shurl.esy.es/y"}/>
-                                {" " + name}
-                                {this.props.user.hasOwnProperty('online') && this.props.user.online[this.props.user.id].status == 1 ?
-                                    <span className="show-online"></span> : null}
-                            </div>
+            <div className="col-4 col-md-5 col-lg-5 col-xl-4">
+                <div className="side-clientinfo">
+                    <div className="msg-section">
+                        <h3>Messages</h3>
+                        <div className="edit-cta"><a data-toggle="modal" data-target="#exampleModalCenter"><i
+                            className="far fa-edit"></i></a></div>
+                        <div className="searchform">
+                            <form>
+                                <div className="form-div">
+                                    <input type="text" name="" placeholder="Message"/>
+                                    <button type="submit"><i className="fas fa-search"></i></button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <div className="row sideBar">
-                        {threads && Object.keys(threads).map(threadId => {
-                            /*             if (threads[threadId].hasOwnProperty('messages') && Object.entries(threads[threadId].messages).length > 0) {
-                                             return (
-                                                 <ContactSingle key={threadId} id={threadId} onClick={this.onClickContactSingle}/>);
-                                         }*/
-                            return (
-                                <ContactSingle key={threadId} id={threadId} onClick={this.onClickContactSingle}/>
-                            );
-                        })}
+                    <div className="userdirectory">
+                        <ul className="users-list">
+                            {threads && Object.keys(threads).map(threadId => {
+                                return (
+                                    <ContactSingle key={threadId} id={threadId} onClick={this.onClickContactSingle}/>
+                                );
+                            })}
+
+                        </ul>
                     </div>
                 </div>
-                {/*<div className="side-two">
-                    <div className="row newMessage-heading">
-                        <div className="row newMessage-main">
-                            <div className="col-sm-2 col-xs-2 newMessage-back">
-                                <i className="fa fa-arrow-left" aria-hidden="true"></i>
-                            </div>
-                            <div className="col-sm-10 col-xs-10 newMessage-title">
-                                New Chat
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row composeBox">
-                        <div className="col-sm-12 composeBox-inner">
-                            <div className="form-group has-feedback">
-                                <input id="composeText" type="text" className="form-control" name="searchText"
-                                       placeholder="Search People"/>
-                                <span className="glyphicon glyphicon-search form-control-feedback"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row compose-sideBar">
-                        <div className="row sideBar-body">
-                            <div className="col-sm-3 col-xs-3 sideBar-avatar">
-                                <div className="avatar-icon">
-                                    <img src="http://shurl.esy.es/y"/>
-                                </div>
-                            </div>
-                            <div className="col-sm-9 col-xs-9 sideBar-main">
-                                <div className="row">
-                                    <div className="col-sm-8 col-xs-8 sideBar-name">
-                    <span className="name-meta">Ankit Jain
-                  </span>
-                                    </div>
-                                    <div className="col-sm-4 col-xs-4 pull-right sideBar-time">
-                    <span className="time-meta pull-right">18:18
-                  </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="row sideBar-body">
-                            <div className="col-sm-3 col-xs-3 sideBar-avatar">
-                                <div className="avatar-icon">
-                                    <img src="http://shurl.esy.es/y"/>
-                                </div>
-                            </div>
-                            <div className="col-sm-9 col-xs-9 sideBar-main">
-                                <div className="row">
-                                    <div className="col-sm-8 col-xs-8 sideBar-name">
-                    <span className="name-meta">Ankit Jain
-                  </span>
-                                    </div>
-                                    <div className="col-sm-4 col-xs-4 pull-right sideBar-time">
-                    <span className="time-meta pull-right">18:18
-                  </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row sideBar-body">
-                            <div className="col-sm-3 col-xs-3 sideBar-avatar">
-                                <div className="avatar-icon">
-                                    <img src="http://shurl.esy.es/y"/>
-                                </div>
-                            </div>
-                            <div className="col-sm-9 col-xs-9 sideBar-main">
-                                <div className="row">
-                                    <div className="col-sm-8 col-xs-8 sideBar-name">
-                    <span className="name-meta">Ankit Jain
-                  </span>
-                                    </div>
-                                    <div className="col-sm-4 col-xs-4 pull-right sideBar-time">
-                    <span className="time-meta pull-right">18:18
-                  </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row sideBar-body">
-                            <div className="col-sm-3 col-xs-3 sideBar-avatar">
-                                <div className="avatar-icon">
-                                    <img src="http://shurl.esy.es/y"/>
-                                </div>
-                            </div>
-                            <div className="col-sm-9 col-xs-9 sideBar-main">
-                                <div className="row">
-                                    <div className="col-sm-8 col-xs-8 sideBar-name">
-                    <span className="name-meta">Ankit Jain
-                  </span>
-                                    </div>
-                                    <div className="col-sm-4 col-xs-4 pull-right sideBar-time">
-                    <span className="time-meta pull-right">18:18
-                  </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row sideBar-body">
-                            <div className="col-sm-3 col-xs-3 sideBar-avatar">
-                                <div className="avatar-icon">
-                                    <img src="http://shurl.esy.es/y"/>
-                                </div>
-                            </div>
-                            <div className="col-sm-9 col-xs-9 sideBar-main">
-                                <div className="row">
-                                    <div className="col-sm-8 col-xs-8 sideBar-name">
-                    <span className="name-meta">Ankit Jain
-                  </span>
-                                    </div>
-                                    <div className="col-sm-4 col-xs-4 pull-right sideBar-time">
-                    <span className="time-meta pull-right">18:18
-                  </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row sideBar-body">
-                            <div className="col-sm-3 col-xs-3 sideBar-avatar">
-                                <div className="avatar-icon">
-                                    <img src="http://shurl.esy.es/y"/>
-                                </div>
-                            </div>
-                            <div className="col-sm-9 col-xs-9 sideBar-main">
-                                <div className="row">
-                                    <div className="col-sm-8 col-xs-8 sideBar-name">
-                    <span className="name-meta">Ankit Jain
-                  </span>
-                                    </div>
-                                    <div className="col-sm-4 col-xs-4 pull-right sideBar-time">
-                    <span className="time-meta pull-right">18:18
-                  </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row sideBar-body">
-                            <div className="col-sm-3 col-xs-3 sideBar-avatar">
-                                <div className="avatar-icon">
-                                    <img src="http://shurl.esy.es/y"/>
-                                </div>
-                            </div>
-                            <div className="col-sm-9 col-xs-9 sideBar-main">
-                                <div className="row">
-                                    <div className="col-sm-8 col-xs-8 sideBar-name">
-                    <span className="name-meta">Ankit Jain
-                  </span>
-                                    </div>
-                                    <div className="col-sm-4 col-xs-4 pull-right sideBar-time">
-                    <span className="time-meta pull-right">18:18
-                  </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row sideBar-body">
-                            <div className="col-sm-3 col-xs-3 sideBar-avatar">
-                                <div className="avatar-icon">
-                                    <img src="http://shurl.esy.es/y"/>
-                                </div>
-                            </div>
-                            <div className="col-sm-9 col-xs-9 sideBar-main">
-                                <div className="row">
-                                    <div className="col-sm-8 col-xs-8 sideBar-name">
-                    <span className="name-meta">Ankit Jain
-                  </span>
-                                    </div>
-                                    <div className="col-sm-4 col-xs-4 pull-right sideBar-time">
-                    <span className="time-meta pull-right">18:18
-                  </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row sideBar-body">
-                            <div className="col-sm-3 col-xs-3 sideBar-avatar">
-                                <div className="avatar-icon">
-                                    <img src="http://shurl.esy.es/y"/>
-                                </div>
-                            </div>
-                            <div className="col-sm-9 col-xs-9 sideBar-main">
-                                <div className="row">
-                                    <div className="col-sm-8 col-xs-8 sideBar-name">
-                    <span className="name-meta">Ankit Jain
-                  </span>
-                                    </div>
-                                    <div className="col-sm-4 col-xs-4 pull-right sideBar-time">
-                    <span className="time-meta pull-right">18:18
-                  </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row sideBar-body">
-                            <div className="col-sm-3 col-xs-3 sideBar-avatar">
-                                <div className="avatar-icon">
-                                    <img src="http://shurl.esy.es/y"/>
-                                </div>
-                            </div>
-                            <div className="col-sm-9 col-xs-9 sideBar-main">
-                                <div className="row">
-                                    <div className="col-sm-8 col-xs-8 sideBar-name">
-                    <span className="name-meta">Ankit Jain
-                  </span>
-                                    </div>
-                                    <div className="col-sm-4 col-xs-4 pull-right sideBar-time">
-                    <span className="time-meta pull-right">18:18
-                  </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>*/}
             </div>
         );
     }

@@ -134,11 +134,9 @@ class Root extends Component {
 
     render() {
         return (
-            <div className="container app">
-                <div className="row app-one">
-                    <Contacts/>
-                    <Conversations/>
-                </div>
+            <div className="row">
+                <Contacts/>
+                <Conversations/>
             </div>
         );
     }
